@@ -1,0 +1,16 @@
+<div class="container">
+  <h1>Thank You</h1>
+
+  <div class="divider"></div>
+
+  <p style="font-family: 'Cormorant Garamond', serif; font-size: 22px; font-style: italic; color: #666; margin-bottom: 16px;">
+    Dear <%= Rack::Utils.escape_html(@name || 'Guest') %>,
+  </p>
+  <p style="font-size: 15px; color: #666; line-height: 1.8; margin-bottom: 32px;">
+    Your RSVP has been received. We are so grateful and can't wait to celebrate with you on August 8, 2026.
+  </p>
+
+  <div class="divider"></div>
+
+  <a href="/" class="btn">Back to Home</a>
+</div>

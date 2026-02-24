@@ -1,0 +1,92 @@
+<div class="container" style="max-width: 1000px;">
+  <h1>Admin Dashboard</h1>
+  <div class="divider"></div>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-bottom: 40px;">
+    <div style="background: #fff; border: 1px solid #E8E0D0; border-radius: 3px; padding: 24px 32px; min-width: 140px;">
+      <div style="font-family: 'Cormorant Garamond', serif; font-size: 36px; color: #C9A96E;"><%= @total %></div>
+      <div style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #999;">Total RSVPs</div>
+    </div>
+    <div style="background: #fff; border: 1px solid #E8E0D0; border-radius: 3px; padding: 24px 32px; min-width: 140px;">
+      <div style="font-family: 'Cormorant Garamond', serif; font-size: 36px; color: #C9A96E;"><%= @attending %></div>
+      <div style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #999;">Attending</div>
+    </div>
+    <div style="background: #fff; border: 1px solid #E8E0D0; border-radius: 3px; padding: 24px 32px; min-width: 140px;">
+      <div style="font-family: 'Cormorant Garamond', serif; font-size: 36px; color: #C9A96E;"><%= @declined %></div>
+      <div style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #999;">Declined</div>
+    </div>
+    <div style="background: #fff; border: 1px solid #E8E0D0; border-radius: 3px; padding: 24px 32px; min-width: 140px;">
+      <div style="font-family: 'Cormorant Garamond', serif; font-size: 36px; color: #C9A96E;"><%= @plus_ones %></div>
+      <div style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #999;">Plus Ones</div>
+    </div>
+    <div style="background: #fff; border: 1px solid #E8E0D0; border-radius: 3px; padding: 24px 32px; min-width: 140px;">
+      <div style="font-family: 'Cormorant Garamond', serif; font-size: 36px; color: #C9A96E;"><%= @responded_guests %>/<%= @total_guests %></div>
+      <div style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #999;">Guests Responded</div>
+    </div>
+  </div>
+
+  <% unless @meal_counts.empty? %>
+    <h2>Meal Choices</h2>
+    <div style="margin-bottom: 40px;">
+      <% @meal_counts.sort_by { |_, v| -v }.each do |meal, count| %>
+        <div style="display: flex; justify-content: space-between; max-width: 400px; margin: 8px auto; padding: 8px 0; border-bottom: 1px solid #E8E0D0;">
+          <span><%= meal %></span>
+          <span style="color: #C9A96E; font-weight: 400;"><%= count %></span>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="divider"></div>
+
+  <h2>All Responses</h2>
+  <div style="overflow-x: auto; margin-top: 24px;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;">
+      <thead>
+        <tr style="border-bottom: 2px solid #C9A96E;">
+          <th style="padding: 10px 12px; font-weight: 500; letter-spacing: 1px; font-size: 11px; text-transform: uppercase; color: #999;">Name</th>
+          <th style="padding: 10px 12px; font-weight: 500; letter-spacing: 1px; font-size: 11px; text-transform: uppercase; color: #999;">Status</th>
+          <th style="padding: 10px 12px; font-weight: 500; letter-spacing: 1px; font-size: 11px; text-transform: uppercase; color: #999;">Meal</th>
+          <th style="padding: 10px 12px; font-weight: 500; letter-spacing: 1px; font-size: 11px; text-transform: uppercase; color: #999;">Plus One</th>
+          <th style="padding: 10px 12px; font-weight: 500; letter-spacing: 1px; font-size: 11px; text-transform: uppercase; color: #999;">Dietary</th>
+          <th style="padding: 10px 12px; font-weight: 500; letter-spacing: 1px; font-size: 11px; text-transform: uppercase; color: #999;">Date</th>
+          <th style="padding: 10px 12px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @rsvps.empty? %>
+          <tr>
+            <td colspan="7" style="padding: 24px; text-align: center; color: #999;">No RSVPs yet</td>
+          </tr>
+        <% end %>
+        <% @rsvps.each do |rsvp| %>
+          <tr style="border-bottom: 1px solid #E8E0D0;">
+            <td style="padding: 10px 12px;"><%= rsvp[:name] %></td>
+            <td style="padding: 10px 12px;"><%= rsvp[:attending] ? 'Attending' : 'Declined' %></td>
+            <td style="padding: 10px 12px;"><%= rsvp[:meal_choice] || '—' %></td>
+            <td style="padding: 10px 12px;">
+              <% if rsvp[:plus_one] %>
+                <%= rsvp[:plus_one_name] || 'Yes' %>
+                <% if rsvp[:plus_one_meal_choice] %>
+                  <br><span style="font-size: 12px; color: #999;">Meal: <%= rsvp[:plus_one_meal_choice] %></span>
+                <% end %>
+              <% else %>
+                —
+              <% end %>
+            </td>
+            <td style="padding: 10px 12px;"><%= rsvp[:dietary_restrictions] && !rsvp[:dietary_restrictions].empty? ? rsvp[:dietary_restrictions] : '—' %></td>
+            <td style="padding: 10px 12px; white-space: nowrap; font-size: 12px; color: #999;"><%= rsvp[:created_at]&.strftime('%b %d, %Y') || '—' %></td>
+            <td style="padding: 10px 12px;">
+              <form method="post" action="/admin/rsvp/<%= rsvp[:id] %>/delete" onsubmit="return confirm('Delete RSVP from <%= rsvp[:name] %>?');" style="margin: 0;">
+                <button type="submit" style="background: none; border: none; color: #c0392b; cursor: pointer; font-size: 12px; letter-spacing: 1px; font-family: 'Montserrat', sans-serif; padding: 4px 8px;">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+  <a href="/admin/logout" style="font-size: 13px; color: #999; letter-spacing: 1px; text-decoration: none;">Log Out</a>
+</div>

@@ -1,0 +1,179 @@
+<div class="container">
+  <h1>RSVP</h1>
+  <p style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; color: #666; margin-top: 8px;">We look forward to celebrating with you</p>
+
+  <div class="divider"></div>
+
+  <style>
+    .form-group {
+      text-align: left;
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
+      color: #2C2C2C;
+    }
+
+    .form-group input[type="text"],
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      border: 1px solid #D9D2C7;
+      border-radius: 3px;
+      background-color: #FFFDF7;
+      color: #2C2C2C;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #C9A96E;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 24px;
+      margin-top: 4px;
+    }
+
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: none;
+      letter-spacing: 0;
+      font-size: 14px;
+      font-weight: 300;
+      cursor: pointer;
+    }
+
+    .radio-group input[type="radio"] {
+      accent-color: #C9A96E;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 300;
+      text-transform: none;
+      letter-spacing: 0;
+      cursor: pointer;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      accent-color: #C9A96E;
+    }
+
+    #plus-one-fields {
+      display: none;
+      margin-top: 16px;
+      padding: 24px;
+      background-color: #FAF7F0;
+      border-radius: 3px;
+      border: 1px solid #E8E0D0;
+    }
+
+    #plus-one-fields .form-group:last-child {
+      margin-bottom: 0;
+    }
+  </style>
+
+  <form action="/rsvp" method="post" style="max-width: 500px; margin: 0 auto;">
+    <% if @guest %>
+      <input type="hidden" name="guest_code" value="<%= @guest[:code] %>">
+    <% end %>
+    <div class="form-group">
+      <label for="name">Your Name</label>
+      <% if @guest %>
+        <input type="text" id="name" name="name" required value="<%= @guest[:name] %>" readonly style="background-color: #f0ede6; cursor: default;">
+      <% else %>
+        <input type="text" id="name" name="name" required placeholder="First and Last Name">
+      <% end %>
+    </div>
+
+    <div class="form-group">
+      <label>Will You Be Attending?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="attending" value="yes" required checked> Joyfully Accept</label>
+        <label><input type="radio" name="attending" value="no"> Regretfully Decline</label>
+      </div>
+    </div>
+
+    <div id="attending-fields">
+      <div class="form-group">
+        <label for="meal_choice">Meal Preference</label>
+        <select id="meal_choice" name="meal_choice">
+          <option value="">Select a meal</option>
+          <option value="chicken">Chicken</option>
+          <option value="fish">Fish</option>
+          <option value="vegetarian">Vegetarian</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="plus_one" name="plus_one" onchange="togglePlusOne()">
+          I will be bringing a plus one
+        </label>
+      </div>
+
+      <div id="plus-one-fields">
+        <div class="form-group">
+          <label for="plus_one_name">Plus One's Name</label>
+          <input type="text" id="plus_one_name" name="plus_one_name" placeholder="First and Last Name">
+        </div>
+
+        <div class="form-group">
+          <label for="plus_one_meal_choice">Plus One's Meal Preference</label>
+          <select id="plus_one_meal_choice" name="plus_one_meal_choice">
+            <option value="">Select a meal</option>
+            <option value="chicken">Chicken</option>
+            <option value="fish">Fish</option>
+            <option value="vegetarian">Vegetarian</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dietary_restrictions">Dietary Restrictions or Allergies</label>
+        <textarea id="dietary_restrictions" name="dietary_restrictions" placeholder="Please let us know of any dietary needs..."></textarea>
+      </div>
+    </div>
+
+    <button type="submit" class="btn" style="width: 100%; margin-top: 8px;">Submit RSVP</button>
+  </form>
+</div>
+
+<script>
+  function togglePlusOne() {
+    var fields = document.getElementById('plus-one-fields');
+    var checkbox = document.getElementById('plus_one');
+    fields.style.display = checkbox.checked ? 'block' : 'none';
+  }
+
+  document.querySelectorAll('input[name="attending"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      var fields = document.getElementById('attending-fields');
+      fields.style.display = this.value === 'yes' ? 'block' : 'none';
+    });
+  });
+</script>

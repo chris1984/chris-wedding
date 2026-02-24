@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roberts &amp; Ginesi Wedding</title>
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      color: #2C2C2C;
+      background-color: #FFFDF7;
+      line-height: 1.6;
+    }
+
+    nav {
+      text-align: center;
+      padding: 24px 0;
+      border-bottom: 1px solid #E8E0D0;
+    }
+
+    nav a {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 13px;
+      color: #2C2C2C;
+      text-decoration: none;
+      margin: 0 20px;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: #C9A96E;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+    }
+
+    h1 {
+      font-size: 48px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+
+    .divider {
+      width: 60px;
+      height: 1px;
+      background-color: #C9A96E;
+      margin: 32px auto;
+    }
+
+    .btn {
+      display: inline-block;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 14px 36px;
+      background-color: #C9A96E;
+      color: #2C2C2C;
+      text-decoration: none;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #B8964F;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 24px;
+      border-top: 1px solid #E8E0D0;
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/">Home</a>
+    <%# <a href="/rsvp">RSVP</a> %>
+  </nav>
+
+  <%= yield %>
+
+  <footer>
+    Roberts &amp; Ginesi &middot; August 8, 2026
+  </footer>
+</body>
+</html>
