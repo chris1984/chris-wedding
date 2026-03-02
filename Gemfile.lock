@@ -8,6 +8,8 @@ GEM
     mini_portile2 (2.8.9)
     mustermann (3.0.4)
       ruby2_keywords (~> 0.0.1)
+    newrelic_rpm (10.2.0)
+      logger
     nio4r (2.7.5)
     puma (7.2.0)
       nio4r (~> 2.0)
@@ -43,6 +45,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  newrelic_rpm
   puma
   rackup
   rqrcode
