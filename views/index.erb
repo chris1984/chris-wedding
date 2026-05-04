@@ -72,13 +72,17 @@
       <span style="display: inline-block; width: 12px; height: 12px; background: #C9A96E; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 3px rgba(0,0,0,0.3);"></span>
       <span style="font-size: 12px; color: #666; letter-spacing: 1px;">Reception</span>
     </div>
+    <div style="display: flex; align-items: center; gap: 6px;">
+      <span style="display: inline-block; width: 12px; height: 12px; background: #4A7C8A; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 3px rgba(0,0,0,0.3);"></span>
+      <span style="font-size: 12px; color: #666; letter-spacing: 1px;">Hotel</span>
+    </div>
   </div>
 
   <script>
   (function() {
     var map = L.map('venue-map', {
       scrollWheelZoom: false
-    }).setView([41.5065, -81.6095], 16);
+    }).setView([41.5060, -81.6080], 16);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
@@ -112,6 +116,16 @@
         '<strong style="font-size:16px;">Reception</strong><br>' +
         '<span style="font-size:14px;">Severance Music Center</span><br>' +
         '<span style="font-size:12px;color:#666;">11001 Euclid Ave</span>' +
+        '</div>'
+      );
+
+    L.marker([41.5078, -81.6056], {icon: venueIcon('#4A7C8A')})
+      .addTo(map)
+      .bindPopup(
+        '<div style="text-align:center;font-family:Cormorant Garamond,serif;min-width:180px;">' +
+        '<strong style="font-size:16px;">Hotel</strong><br>' +
+        '<span style="font-size:14px;">Courtyard by Marriott</span><br>' +
+        '<span style="font-size:12px;color:#666;">2021 Cornell Rd</span>' +
         '</div>'
       );
 
