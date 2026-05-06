@@ -53,18 +53,33 @@ get '/rsvp/:code' do
 end
 
 post '/rsvp' do
-  rsvp_id = DB[:rsvps].insert(
-    name: params[:name],
-    attending: params[:attending] == 'yes',
-    plus_one: params[:plus_one] == 'on',
-    plus_one_name: params[:plus_one_name],
-    meal_choice: params[:meal_choice],
-    plus_one_meal_choice: params[:plus_one_meal_choice],
-    dietary_restrictions: params[:dietary_restrictions]
-  )
+  DB.transaction do
+    rsvp_id = DB[:rsvps].insert(
+      name: params[:name],
+      attending: params[:attending] == 'yes',
+      plus_one: params[:plus_one] == 'on',
+      plus_one_name: params[:plus_one_name],
+      meal_choice: params[:meal_choice],
+      plus_one_meal_choice: params[:plus_one_meal_choice],
+      dietary_restrictions: params[:dietary_restrictions]
+    )
 
-  if params[:guest_code] && !params[:guest_code].empty?
-    DB[:guests].where(code: params[:guest_code]).update(rsvp_id: rsvp_id)
+    # Process kids if present
+    if params[:kids].is_a?(Array)
+      params[:kids].each do |kid|
+        next if kid[:name].to_s.strip.empty?
+
+        DB[:kids].insert(
+          rsvp_id: rsvp_id,
+          name: kid[:name].strip,
+          meal_choice: kid[:meal_choice]
+        )
+      end
+    end
+
+    if params[:guest_code] && !params[:guest_code].empty?
+      DB[:guests].where(code: params[:guest_code]).update(rsvp_id: rsvp_id)
+    end
   end
 
   redirect "/rsvp/success?name=#{URI.encode_www_form_component(params[:name])}"
@@ -94,13 +109,33 @@ get '/admin' do
   require_admin!
 
   @rsvps = DB[:rsvps].order(Sequel.desc(:created_at)).all
+
+  # Fetch all kids grouped by rsvp_id
+  @kids_by_rsvp = DB[:kids].all.group_by { |k| k[:rsvp_id] }
+  @total_kids = DB[:kids].count
+
   @total = @rsvps.count
   @attending = @rsvps.count { |r| r[:attending] }
   @declined = @rsvps.count { |r| !r[:attending] }
   @plus_ones = @rsvps.count { |r| r[:plus_one] }
 
+  # Update meal counts to include kids' meals
   @meal_counts = @rsvps.each_with_object(Hash.new(0)) do |r, counts|
-    counts[r[:meal_choice] || 'Not specified'] += 1 if r[:attending]
+    if r[:attending]
+      counts[r[:meal_choice] || 'Not specified'] += 1
+
+      # Add plus one meal
+      if r[:plus_one] && r[:plus_one_meal_choice]
+        counts[r[:plus_one_meal_choice]] += 1
+      end
+
+      # Add kids meals
+      if @kids_by_rsvp[r[:id]]
+        @kids_by_rsvp[r[:id]].each do |kid|
+          counts[kid[:meal_choice] || 'Not specified'] += 1 if kid[:meal_choice]
+        end
+      end
+    end
   end
 
   @total_guests = DB[:guests].count
@@ -111,7 +146,9 @@ end
 
 post '/admin/rsvp/:id/delete' do
   require_admin!
-  DB[:guests].where(rsvp_id: params[:id].to_i).update(rsvp_id: nil)
-  DB[:rsvps].where(id: params[:id].to_i).delete
+  rsvp_id = params[:id].to_i
+  DB[:guests].where(rsvp_id: rsvp_id).update(rsvp_id: nil)
+  DB[:kids].where(rsvp_id: rsvp_id).delete
+  DB[:rsvps].where(id: rsvp_id).delete
   redirect '/admin'
 end

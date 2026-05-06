@@ -20,6 +20,10 @@
       <div style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #999;">Plus Ones</div>
     </div>
     <div style="background: #fff; border: 1px solid #E8E0D0; border-radius: 3px; padding: 24px 32px; min-width: 140px;">
+      <div style="font-family: 'Cormorant Garamond', serif; font-size: 36px; color: #C9A96E;"><%= @total_kids %></div>
+      <div style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #999;">Kids</div>
+    </div>
+    <div style="background: #fff; border: 1px solid #E8E0D0; border-radius: 3px; padding: 24px 32px; min-width: 140px;">
       <div style="font-family: 'Cormorant Garamond', serif; font-size: 36px; color: #C9A96E;"><%= @responded_guests %>/<%= @total_guests %></div>
       <div style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #999;">Guests Responded</div>
     </div>
@@ -48,6 +52,7 @@
           <th style="padding: 10px 12px; font-weight: 500; letter-spacing: 1px; font-size: 11px; text-transform: uppercase; color: #999;">Status</th>
           <th style="padding: 10px 12px; font-weight: 500; letter-spacing: 1px; font-size: 11px; text-transform: uppercase; color: #999;">Meal</th>
           <th style="padding: 10px 12px; font-weight: 500; letter-spacing: 1px; font-size: 11px; text-transform: uppercase; color: #999;">Plus One</th>
+          <th style="padding: 10px 12px; font-weight: 500; letter-spacing: 1px; font-size: 11px; text-transform: uppercase; color: #999;">Kids</th>
           <th style="padding: 10px 12px; font-weight: 500; letter-spacing: 1px; font-size: 11px; text-transform: uppercase; color: #999;">Dietary</th>
           <th style="padding: 10px 12px; font-weight: 500; letter-spacing: 1px; font-size: 11px; text-transform: uppercase; color: #999;">Date</th>
           <th style="padding: 10px 12px;"></th>
@@ -56,7 +61,7 @@
       <tbody>
         <% if @rsvps.empty? %>
           <tr>
-            <td colspan="7" style="padding: 24px; text-align: center; color: #999;">No RSVPs yet</td>
+            <td colspan="8" style="padding: 24px; text-align: center; color: #999;">No RSVPs yet</td>
           </tr>
         <% end %>
         <% @rsvps.each do |rsvp| %>
@@ -69,6 +74,21 @@
                 <%= rsvp[:plus_one_name] || 'Yes' %>
                 <% if rsvp[:plus_one_meal_choice] %>
                   <br><span style="font-size: 12px; color: #999;">Meal: <%= rsvp[:plus_one_meal_choice] %></span>
+                <% end %>
+              <% else %>
+                —
+              <% end %>
+            </td>
+            <td style="padding: 10px 12px;">
+              <% if @kids_by_rsvp[rsvp[:id]] && @kids_by_rsvp[rsvp[:id]].any? %>
+                <% @kids_by_rsvp[rsvp[:id]].each_with_index do |kid, index| %>
+                  <%= kid[:name] %>
+                  <% if kid[:meal_choice] %>
+                    <br><span style="font-size: 12px; color: #999;">Meal: <%= kid[:meal_choice] %></span>
+                  <% end %>
+                  <% unless index == @kids_by_rsvp[rsvp[:id]].length - 1 %>
+                    <br><br>
+                  <% end %>
                 <% end %>
               <% else %>
                 —
