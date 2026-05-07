@@ -58,8 +58,8 @@
   <h2 id="map">University Circle Area</h2>
   <p style="font-size: 15px; color: #666; margin-bottom: 24px;">Both venues are located in Cleveland's historic University Circle neighborhood.</p>
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.1.0/mapbox-gl.css" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.0/mapbox-gl.js"></script>
 
   <div id="venue-map" style="width: 100%; height: 420px; border-radius: 3px; border: 1px solid #E8E0D0; box-shadow: 0 2px 20px rgba(0,0,0,0.08);"></div>
 
@@ -80,62 +80,73 @@
 
   <script>
   (function() {
-    var map = L.map('venue-map', {
-      scrollWheelZoom: false
-    }).setView([41.5060, -81.6080], 16);
+    mapboxgl.accessToken = 'pk.eyJ1IjoiY2ludHJpeDg0IiwiYSI6ImNtb3Zsa294ZzA4bWkyeHB4eGhwNDhwbGUifQ.Iq7tvsYru15vCOV_p4ciFA';
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
-      maxZoom: 19
-    }).addTo(map);
+    var map = new mapboxgl.Map({
+      container: 'venue-map',
+      style: 'mapbox://styles/mapbox/light-v11',
+      center: [-81.6080, 41.5060],
+      zoom: 15.5,
+      scrollZoom: false
+    });
 
-    function venueIcon(color) {
-      return L.divIcon({
-        className: '',
-        html: '<div style="width:28px;height:28px;background:' + color + ';border:3px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.3);"></div>',
-        iconSize: [28, 28],
-        iconAnchor: [14, 14],
-        popupAnchor: [0, -18]
-      });
+    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+    function createMarker(color, lngLat, popupHTML) {
+      var el = document.createElement('div');
+      el.style.width = '28px';
+      el.style.height = '28px';
+      el.style.background = color;
+      el.style.border = '3px solid #fff';
+      el.style.borderRadius = '50%';
+      el.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)';
+      el.style.cursor = 'pointer';
+
+      new mapboxgl.Marker(el)
+        .setLngLat(lngLat)
+        .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(popupHTML))
+        .addTo(map);
     }
 
-    L.marker([41.5093, -81.6074], {icon: venueIcon('#8B2252')})
-      .addTo(map)
-      .bindPopup(
-        '<div style="text-align:center;font-family:Cormorant Garamond,serif;min-width:180px;">' +
-        '<strong style="font-size:16px;">Ceremony</strong><br>' +
-        '<span style="font-size:14px;">Florence Harkness Memorial Chapel</span><br>' +
-        '<span style="font-size:12px;color:#666;">11200 Bellflower Rd</span>' +
-        '</div>'
-      );
+    createMarker('#8B2252', [-81.6074, 41.5093],
+      '<div style="text-align:center;font-family:Cormorant Garamond,serif;min-width:180px;">' +
+      '<strong style="font-size:16px;">Ceremony</strong><br>' +
+      '<span style="font-size:14px;">Florence Harkness Memorial Chapel</span><br>' +
+      '<span style="font-size:12px;color:#666;">11200 Bellflower Rd</span>' +
+      '</div>'
+    );
 
-    L.marker([41.5063, -81.6093], {icon: venueIcon('#C9A96E')})
-      .addTo(map)
-      .bindPopup(
-        '<div style="text-align:center;font-family:Cormorant Garamond,serif;min-width:180px;">' +
-        '<strong style="font-size:16px;">Reception</strong><br>' +
-        '<span style="font-size:14px;">Severance Music Center</span><br>' +
-        '<span style="font-size:12px;color:#666;">11001 Euclid Ave</span>' +
-        '</div>'
-      );
+    createMarker('#C9A96E', [-81.6093, 41.5063],
+      '<div style="text-align:center;font-family:Cormorant Garamond,serif;min-width:180px;">' +
+      '<strong style="font-size:16px;">Reception</strong><br>' +
+      '<span style="font-size:14px;">Severance Music Center</span><br>' +
+      '<span style="font-size:12px;color:#666;">11001 Euclid Ave</span>' +
+      '</div>'
+    );
 
-    L.marker([41.5078, -81.6056], {icon: venueIcon('#4A7C8A')})
-      .addTo(map)
-      .bindPopup(
-        '<div style="text-align:center;font-family:Cormorant Garamond,serif;min-width:180px;">' +
-        '<strong style="font-size:16px;">Hotel</strong><br>' +
-        '<span style="font-size:14px;">Courtyard by Marriott</span><br>' +
-        '<span style="font-size:12px;color:#666;">2021 Cornell Rd</span>' +
-        '</div>'
-      );
+    createMarker('#4A7C8A', [-81.6056, 41.5078],
+      '<div style="text-align:center;font-family:Cormorant Garamond,serif;min-width:180px;">' +
+      '<strong style="font-size:16px;">Hotel</strong><br>' +
+      '<span style="font-size:14px;">Courtyard by Marriott</span><br>' +
+      '<span style="font-size:12px;color:#666;">2021 Cornell Rd</span>' +
+      '</div>'
+    );
 
-    L.marker([41.5088, -81.6120], {
-      icon: L.divIcon({
-        className: '',
-        html: '<div style="background:rgba(255,255,255,0.9);padding:3px 8px;border-radius:3px;font-size:11px;font-family:Montserrat,sans-serif;letter-spacing:1px;color:#666;white-space:nowrap;border:1px solid #E8E0D0;">Wade Oval</div>',
-        iconAnchor: [30, 10]
-      })
-    }).addTo(map);
+    var labelEl = document.createElement('div');
+    labelEl.style.background = 'rgba(255,255,255,0.9)';
+    labelEl.style.padding = '3px 8px';
+    labelEl.style.borderRadius = '3px';
+    labelEl.style.fontSize = '11px';
+    labelEl.style.fontFamily = 'Montserrat,sans-serif';
+    labelEl.style.letterSpacing = '1px';
+    labelEl.style.color = '#666';
+    labelEl.style.whiteSpace = 'nowrap';
+    labelEl.style.border = '1px solid #E8E0D0';
+    labelEl.textContent = 'Wade Oval';
+
+    new mapboxgl.Marker(labelEl, { anchor: 'center' })
+      .setLngLat([-81.6120, 41.5088])
+      .addTo(map);
   })();
   </script>
 
