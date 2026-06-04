@@ -5,8 +5,12 @@ require 'sqlite3'
 set :bind, '0.0.0.0'
 set :host_authorization, {permitted_hosts: []}
 
-enable :sessions
-set :session_secret, ENV.fetch('SESSION_SECRET') { SecureRandom.hex(32) }
+use Rack::Session::Cookie,
+  key: 'rack.session',
+  path: '/',
+  secret: ENV.fetch('SESSION_SECRET') { SecureRandom.hex(32) },
+  same_site: :lax,
+  httponly: true
 
 ADMIN_PASSWORD = ENV.fetch('ADMIN_PASSWORD', 'admin')
 
