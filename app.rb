@@ -3,14 +3,14 @@ require 'sequel'
 require 'sqlite3'
 
 set :bind, '0.0.0.0'
-set :host_authorization, {permitted_hosts: []}
+set :host_authorization, { permitted_hosts: [] }
 
 use Rack::Session::Cookie,
-  key: 'rack.session',
-  path: '/',
-  secret: ENV.fetch('SESSION_SECRET') { SecureRandom.hex(32) },
-  same_site: :lax,
-  httponly: true
+    key: 'rack.session',
+    path: '/',
+    secret: ENV.fetch('SESSION_SECRET') { SecureRandom.hex(32) },
+    same_site: :lax,
+    httponly: true
 
 ADMIN_PASSWORD = ENV.fetch('ADMIN_PASSWORD', 'admin')
 
@@ -22,14 +22,28 @@ helpers do
   def require_admin!
     redirect '/admin/login' unless admin_authenticated?
   end
+
+  # RSVP is disabled now that the wedding is over. Set RSVP_ENABLED=true to turn
+  # it back on for a demo — no code needs to change.
+  def rsvp_enabled?
+    ENV.fetch('RSVP_ENABLED', 'false') == 'true'
+  end
 end
 
 # Database setup
-DB = Sequel.sqlite(File.join(__dir__, 'db', 'wedding.sqlite3'))
+# The path can be overridden with WEDDING_DB (used by the test suite to run
+# against a throwaway database).
+DB = Sequel.sqlite(ENV.fetch('WEDDING_DB') { File.join(__dir__, 'db', 'wedding.sqlite3') })
 
 # Run migrations
 Sequel.extension :migration
 Sequel::Migrator.run(DB, File.join(__dir__, 'db', 'migrate'))
+
+# Block all /rsvp routes while the feature is disabled. The route handlers
+# below are kept intact so RSVP can be re-enabled via rsvp_enabled? for a demo.
+before '/rsvp*' do
+  halt 404, erb(:guest_not_found) unless rsvp_enabled?
+end
 
 # Routes
 get '/' do
@@ -125,20 +139,16 @@ get '/admin' do
 
   # Update meal counts to include kids' meals
   @meal_counts = @rsvps.each_with_object(Hash.new(0)) do |r, counts|
-    if r[:attending]
-      counts[r[:meal_choice] || 'Not specified'] += 1
+    next unless r[:attending]
 
-      # Add plus one meal
-      if r[:plus_one] && r[:plus_one_meal_choice]
-        counts[r[:plus_one_meal_choice]] += 1
-      end
+    counts[r[:meal_choice] || 'Not specified'] += 1
 
-      # Add kids meals
-      if @kids_by_rsvp[r[:id]]
-        @kids_by_rsvp[r[:id]].each do |kid|
-          counts[kid[:meal_choice] || 'Not specified'] += 1 if kid[:meal_choice]
-        end
-      end
+    # Add plus one meal
+    counts[r[:plus_one_meal_choice]] += 1 if r[:plus_one] && r[:plus_one_meal_choice]
+
+    # Add kids meals
+    @kids_by_rsvp[r[:id]]&.each do |kid|
+      counts[kid[:meal_choice] || 'Not specified'] += 1 if kid[:meal_choice]
     end
   end
 
