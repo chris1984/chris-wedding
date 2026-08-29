@@ -3,14 +3,14 @@ require 'sequel'
 require 'sqlite3'
 
 set :bind, '0.0.0.0'
-set :host_authorization, {permitted_hosts: []}
+set :host_authorization, { permitted_hosts: [] }
 
 use Rack::Session::Cookie,
-  key: 'rack.session',
-  path: '/',
-  secret: ENV.fetch('SESSION_SECRET') { SecureRandom.hex(32) },
-  same_site: :lax,
-  httponly: true
+    key: 'rack.session',
+    path: '/',
+    secret: ENV.fetch('SESSION_SECRET') { SecureRandom.hex(32) },
+    same_site: :lax,
+    httponly: true
 
 ADMIN_PASSWORD = ENV.fetch('ADMIN_PASSWORD', 'admin')
 
@@ -139,20 +139,16 @@ get '/admin' do
 
   # Update meal counts to include kids' meals
   @meal_counts = @rsvps.each_with_object(Hash.new(0)) do |r, counts|
-    if r[:attending]
-      counts[r[:meal_choice] || 'Not specified'] += 1
+    next unless r[:attending]
 
-      # Add plus one meal
-      if r[:plus_one] && r[:plus_one_meal_choice]
-        counts[r[:plus_one_meal_choice]] += 1
-      end
+    counts[r[:meal_choice] || 'Not specified'] += 1
 
-      # Add kids meals
-      if @kids_by_rsvp[r[:id]]
-        @kids_by_rsvp[r[:id]].each do |kid|
-          counts[kid[:meal_choice] || 'Not specified'] += 1 if kid[:meal_choice]
-        end
-      end
+    # Add plus one meal
+    counts[r[:plus_one_meal_choice]] += 1 if r[:plus_one] && r[:plus_one_meal_choice]
+
+    # Add kids meals
+    @kids_by_rsvp[r[:id]]&.each do |kid|
+      counts[kid[:meal_choice] || 'Not specified'] += 1 if kid[:meal_choice]
     end
   end
 

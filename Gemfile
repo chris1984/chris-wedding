@@ -1,12 +1,16 @@
 source 'https://rubygems.org'
 
-gem 'sinatra'
-gem 'rackup'
-gem 'sequel'
-gem 'sqlite3'
-gem 'puma'
-gem 'rqrcode'
 gem 'newrelic_rpm'
+gem 'puma'
+gem 'rackup'
+gem 'rqrcode'
+gem 'sequel'
+gem 'sinatra'
+gem 'sqlite3'
+
+group :development, :test do
+  gem 'rubocop', require: false
+end
 
 group :test do
   gem 'minitest'

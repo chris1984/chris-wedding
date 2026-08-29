@@ -6,4 +6,11 @@ Rake::TestTask.new(:test) do |t|
   t.warning = false
 end
 
-task default: :test
+begin
+  require 'rubocop/rake_task'
+  RuboCop::RakeTask.new(:lint)
+rescue LoadError
+  # rubocop is only available in the development/test groups
+end
+
+task default: %i[lint test]

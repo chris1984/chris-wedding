@@ -1,0 +1,31 @@
+AllCops:
+  TargetRubyVersion: 3.0
+  NewCops: enable
+  SuggestExtensions: false
+  Exclude:
+    - 'vendor/**/*'
+    - 'db/*.sqlite3'
+
+# Adding magic comments to every file adds noise for an app this small.
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# Top-level scripts and migrations don't need class/module docs.
+Style/Documentation:
+  Enabled: false
+
+# Test method names read more clearly with numbers (e.g. returns_404).
+Naming/VariableNumber:
+  Enabled: false
+
+# Don't force a "?" suffix on helpers that merely happen to return a boolean.
+Naming/PredicateMethod:
+  Enabled: false
+
+# Sinatra route blocks and test setup are legitimately long.
+Metrics/AbcSize:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false

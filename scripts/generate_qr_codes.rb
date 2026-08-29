@@ -6,8 +6,8 @@ require 'fileutils'
 
 base_url = ARGV[0]
 unless base_url
-  puts "Usage: bundle exec ruby scripts/generate_qr_codes.rb <base_url>"
-  puts "Example: bundle exec ruby scripts/generate_qr_codes.rb http://localhost:4567"
+  puts 'Usage: bundle exec ruby scripts/generate_qr_codes.rb <base_url>'
+  puts 'Example: bundle exec ruby scripts/generate_qr_codes.rb http://localhost:4567'
   exit 1
 end
 
