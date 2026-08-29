@@ -7,27 +7,6 @@
   <p style="font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-bottom: 8px;">August 8, 2026</p>
   <p style="font-size: 14px; letter-spacing: 1px; color: #666;">Saturday at Half Past One in the Afternoon</p>
 
-  <div id="countdown" style="margin: 24px 0 0 0; font-family: 'Cormorant Garamond', serif;">
-    <div style="display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;">
-      <div style="min-width: 70px;">
-        <span id="cd-days" style="font-size: 36px; color: #C9A96E; display: block;">--</span>
-        <span style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #999; font-family: 'Montserrat', sans-serif; font-weight: 300;">Days</span>
-      </div>
-      <div style="min-width: 70px;">
-        <span id="cd-hours" style="font-size: 36px; color: #C9A96E; display: block;">--</span>
-        <span style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #999; font-family: 'Montserrat', sans-serif; font-weight: 300;">Hours</span>
-      </div>
-      <div style="min-width: 70px;">
-        <span id="cd-minutes" style="font-size: 36px; color: #C9A96E; display: block;">--</span>
-        <span style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #999; font-family: 'Montserrat', sans-serif; font-weight: 300;">Minutes</span>
-      </div>
-      <div style="min-width: 70px;">
-        <span id="cd-seconds" style="font-size: 36px; color: #C9A96E; display: block;">--</span>
-        <span style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #999; font-family: 'Montserrat', sans-serif; font-weight: 300;">Seconds</span>
-      </div>
-    </div>
-  </div>
-
   <div class="divider"></div>
 
   <div style="margin: 40px 0;">
@@ -71,10 +50,6 @@
     <div style="display: flex; align-items: center; gap: 6px;">
       <span style="display: inline-block; width: 12px; height: 12px; background: #C9A96E; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 3px rgba(0,0,0,0.3);"></span>
       <span style="font-size: 12px; color: #666; letter-spacing: 1px;">Reception</span>
-    </div>
-    <div style="display: flex; align-items: center; gap: 6px;">
-      <span style="display: inline-block; width: 12px; height: 12px; background: #4A7C8A; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 3px rgba(0,0,0,0.3);"></span>
-      <span style="font-size: 12px; color: #666; letter-spacing: 1px;">Hotel</span>
     </div>
   </div>
 
@@ -161,14 +136,6 @@
       '</div>'
     );
 
-    createMarker('#4A7C8A', [-81.6056, 41.5078],
-      '<div style="text-align:center;font-family:Cormorant Garamond,serif;min-width:180px;">' +
-      '<strong style="font-size:16px;">Hotel</strong><br>' +
-      '<span style="font-size:14px;">Courtyard by Marriott</span><br>' +
-      '<span style="font-size:12px;color:#666;">2021 Cornell Rd</span>' +
-      '</div>'
-    );
-
     var labelEl = document.createElement('div');
     labelEl.style.background = 'rgba(255,255,255,0.9)';
     labelEl.style.padding = '3px 8px';
@@ -222,34 +189,6 @@
 
   <div class="divider"></div>
 
-  <h2 id="accommodations">Accommodations</h2>
-  <p style="font-size: 15px; color: #666; margin-bottom: 24px;">Here are a few nearby hotels for your stay.</p>
-
-  <div style="display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; margin-bottom: 8px;">
-    <div style="background: #fff; border: 1px solid #E8E0D0; border-radius: 3px; padding: 32px; width: 300px;">
-      <h2 style="font-size: 24px; margin-bottom: 8px;">Courtyard by Marriott</h2>
-      <p style="font-size: 13px; color: #999; margin-bottom: 4px;">2021 Cornell Rd</p>
-      <p style="font-size: 13px; color: #999; margin-bottom: 16px;">Cleveland, OH 44106</p>
-      <a href="https://app.marriott.com/reslink?id=1776173815033&key=GRP&app=resvlink" class="btn" style="font-size: 11px; padding: 10px 24px;" target="_blank" rel="noopener">Book Now</a>
-    </div>
-
-    <div style="background: #fff; border: 1px solid #E8E0D0; border-radius: 3px; padding: 32px; width: 300px;">
-      <h2 style="font-size: 24px; margin-bottom: 8px;">InterContinental Cleveland</h2>
-      <p style="font-size: 13px; color: #999; margin-bottom: 4px;">9801 Carnegie Ave</p>
-      <p style="font-size: 13px; color: #999; margin-bottom: 16px;">Cleveland, OH 44106</p>
-      <a href="https://www.ihg.com/intercontinental/hotels/us/en/cleveland/cleha/hoteldetail" class="btn" style="font-size: 11px; padding: 10px 24px;" target="_blank" rel="noopener">Book Now</a>
-    </div>
-
-    <div style="background: #fff; border: 1px solid #E8E0D0; border-radius: 3px; padding: 32px; width: 300px;">
-      <h2 style="font-size: 24px; margin-bottom: 8px;">Tudor Arms Hotel</h2>
-      <p style="font-size: 13px; color: #999; margin-bottom: 4px;">10660 Carnegie Ave</p>
-      <p style="font-size: 13px; color: #999; margin-bottom: 16px;">Cleveland, OH 44106</p>
-      <a href="https://www.hilton.com/en/hotels/cleucdt-the-tudor-arms-hotel-cleveland/" class="btn" style="font-size: 11px; padding: 10px 24px;" target="_blank" rel="noopener">Book Now</a>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
   <h2>Registry</h2>
   <p style="font-size: 15px; color: #666; margin-bottom: 24px;">Your presence is our present. If you wish to honor us with a gift, we've registered at a few places.</p>
   <a href="/registry" class="btn">View Registry</a>
@@ -258,27 +197,3 @@
 
   <%# <a href="/rsvp" class="btn">RSVP Now</a> %>
 </div>
-
-<script>
-(function() {
-  var wedding = new Date('2026-08-08T13:30:00').getTime();
-  function update() {
-    var now = Date.now();
-    var diff = wedding - now;
-    if (diff <= 0) {
-      document.getElementById('countdown').innerHTML = '<p style="font-size: 24px; color: #C9A96E;">The celebration has begun!</p>';
-      return;
-    }
-    var d = Math.floor(diff / 86400000);
-    var h = Math.floor((diff % 86400000) / 3600000);
-    var m = Math.floor((diff % 3600000) / 60000);
-    var s = Math.floor((diff % 60000) / 1000);
-    document.getElementById('cd-days').textContent = d;
-    document.getElementById('cd-hours').textContent = h;
-    document.getElementById('cd-minutes').textContent = m;
-    document.getElementById('cd-seconds').textContent = s;
-  }
-  update();
-  setInterval(update, 1000);
-})();
-</script>

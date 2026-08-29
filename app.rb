@@ -22,14 +22,28 @@ helpers do
   def require_admin!
     redirect '/admin/login' unless admin_authenticated?
   end
+
+  # RSVP is disabled now that the wedding is over. Set RSVP_ENABLED=true to turn
+  # it back on for a demo — no code needs to change.
+  def rsvp_enabled?
+    ENV.fetch('RSVP_ENABLED', 'false') == 'true'
+  end
 end
 
 # Database setup
-DB = Sequel.sqlite(File.join(__dir__, 'db', 'wedding.sqlite3'))
+# The path can be overridden with WEDDING_DB (used by the test suite to run
+# against a throwaway database).
+DB = Sequel.sqlite(ENV.fetch('WEDDING_DB') { File.join(__dir__, 'db', 'wedding.sqlite3') })
 
 # Run migrations
 Sequel.extension :migration
 Sequel::Migrator.run(DB, File.join(__dir__, 'db', 'migrate'))
+
+# Block all /rsvp routes while the feature is disabled. The route handlers
+# below are kept intact so RSVP can be re-enabled via rsvp_enabled? for a demo.
+before '/rsvp*' do
+  halt 404, erb(:guest_not_found) unless rsvp_enabled?
+end
 
 # Routes
 get '/' do
