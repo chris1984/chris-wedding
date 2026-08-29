@@ -9,6 +9,7 @@ gem 'sinatra'
 gem 'sqlite3'
 
 group :development, :test do
+  gem 'rake'
   gem 'rubocop', require: false
 end
 
